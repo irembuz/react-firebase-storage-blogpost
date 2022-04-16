@@ -1,15 +1,34 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { Figure } from "react-bootstrap";
 import "./Blog.css";
-
-const INITIAL_STATE = [
-  { id: 1, baslik: "React Nedir?", okundu: false },
-  { id: 2, baslik: "Redux Nedir?", okundu: true },
-];
+import { db } from "../config/firebaseConfig";
 
 export default function App() {
-  const [liste, setListe] = useState(INITIAL_STATE);
+  const [liste, setListe] = useState([]);
   const [yeniBlog, setYeniBlog] = useState("");
+
+  useEffect(() => {
+    db.collection("blogposts")
+      .get()
+      .then((querySnapshot) => {
+        querySnapshot.forEach((doc) => {
+          // doc.data() is never undefined for query doc snapshots
+           setListe([...liste, doc.data()])
+          // console.log(doc.id, " => ", doc.data());
+        });
+      })
+      .catch((error) => {
+        console.log("Error getting documents: ", error);
+      });
+  }, []);
+
+  // const createBlogPost = async () => {
+  //   db.collection("blogposts").add({
+  //     title: "",
+  //     description: "",
+  //     image_url: "",
+  //   });
+  // };
 
   return (
     <div className="Blog">
@@ -22,7 +41,7 @@ export default function App() {
         />
         <button
           onClick={() => {
-            setListe([...liste, { baslik: yeniBlog }]);
+            setListe([...liste, { title: yeniBlog }]);
             setYeniBlog("");
           }}
         >
@@ -48,7 +67,7 @@ export default function App() {
               alt="120x120"
               src="https://miro.medium.com/max/1200/1*aLg1-G2UAlaKpBopRnmCRg.png"
             />
-            <Figure.Caption>{item.baslik}</Figure.Caption>
+            <Figure.Caption>{item.title}</Figure.Caption>
           </Figure>
         ))}
       </div>
