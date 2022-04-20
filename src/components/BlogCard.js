@@ -1,10 +1,8 @@
 import React, { useState } from "react";
 import { Figure } from "react-bootstrap";
-import "./Blog";
 import "./Blog.css";
 
-const BlogCard = ({ item, index }) => {
-  const [liste, setListe] = useState([]);
+const BlogCard = ({ item, liste, setListe }) => {
   return (
     <div className="blog-card">
       <Figure

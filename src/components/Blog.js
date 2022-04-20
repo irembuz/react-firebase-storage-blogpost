@@ -53,7 +53,7 @@ export default function App() {
       </div>
       <div className="liste">
         {liste.map((item, index) => (
-          <BlogCard key={index} item={item} index={index} />
+          <BlogCard key={index} item={item} liste={liste} setListe={setListe} />
         ))}
       </div>
       <button
