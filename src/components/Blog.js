@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from "react";
-import { Figure } from "react-bootstrap";
 import "./Blog.css";
 import { db } from "../config/firebaseConfig";
+import BlogCard from "./BlogCard";
 
 export default function App() {
   const [liste, setListe] = useState([]);
@@ -15,7 +15,7 @@ export default function App() {
         querySnapshot.forEach((doc) => {
           // doc.data() is never undefined for query doc snapshots
 
-          tentativeArray.push({id:doc.id, ...doc.data()});
+          tentativeArray.push({ id: doc.id, ...doc.data() });
         });
         console.log(tentativeArray);
         setListe([...liste, ...tentativeArray]);
@@ -53,26 +53,7 @@ export default function App() {
       </div>
       <div className="liste">
         {liste.map((item, index) => (
-          <Figure
-            key={index}
-            onClick={() => {
-              setListe(
-                liste.map((e) =>
-                  e.id === item.id ? { ...e, okundu: !e.okundu } : e
-                )
-              );
-            }}
-            className={item.okundu ? "yapildi" : ""}
-            id={item.id}
-          >
-            <Figure.Image
-              width={120}
-              height={120}
-              alt="120x120"
-              src="https://miro.medium.com/max/1200/1*aLg1-G2UAlaKpBopRnmCRg.png"
-            />
-            <Figure.Caption>{item.title}</Figure.Caption>
-          </Figure>
+          <BlogCard key={index} item={item} index={index} />
         ))}
       </div>
       <button
